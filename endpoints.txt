@@ -1,0 +1,11 @@
+
+Endpoints identifiés :
+-------------------
+https://www.googleapis.com/auth/fitness.location.read
+http://schema.org/CommunicateAction
+http://schema.org/FilmAction
+https://www.googleapis.com/auth/drive.apps
+https://www.googleapis.com/auth/games.firstparty
+https://www.googletagmanager.com
+https://www.googleapis.com/auth/plus.moments.write
+https://www.googleapis.com/auth/datastoremobile

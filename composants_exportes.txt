@@ -1,0 +1,12 @@
+Composants exportés :
+-------------------
+com.android.insecurebankv2.LoginActivity
+com.android.insecurebankv2.FilePrefActivity
+com.android.insecurebankv2.DoLogin
+com.android.insecurebankv2.PostLogin
+com.android.insecurebankv2.WrongLogin
+com.android.insecurebankv2.DoTransfer
+com.android.insecurebankv2.ViewStatement
+com.android.insecurebankv2.ChangePassword
+com.google.android.gms.ads.AdActivity
+com.google.android.gms.ads.purchase.InAppPurchaseActivity

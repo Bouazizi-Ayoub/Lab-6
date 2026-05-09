@@ -1,0 +1,6 @@
+Date d'analyse : Sat May  9 05:02:11 AM +01 2026
+Analyste : Bouazizi Ayoub
+VM Mobexler version : Version non disponible
+APK analysé : InsecureBankv2.apk
+b18af2a0e44d7634bbcdf93664d9c78a2695e050393fcfbb5e8b91f902d194a4  InsecureBankv2.apk
+Rapport exporté : MobSF_Report_20260509.pdf

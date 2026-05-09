@@ -1,0 +1,36 @@
+Top vulnérabilités :
+------------------
+1. Mode Debug activé (Sévérité MobSF : HIGH)
+   - Description : L'application est compilée avec android:debuggable=true[cite: 90].
+   - Impact : Permet à un attaquant de connecter un débogueur, d'inspecter la mémoire en temps réel et d'altérer le comportement de l'application bancaire[cite: 90].
+
+2. Composants non protégés / Exportés (Sévérité MobSF : WARNING, Réalité : CRITIQUE)
+   - Description : Les activités (PostLogin, DoTransfer, ViewStatement) et le TrackUserContentProvider sont exportés (android:exported=true)[cite: 91, 92].
+   - Impact : Permet à d'autres applications de contourner l'écran de connexion et d'accéder directement aux transferts d'argent ou de lire la base de données via le Content Provider[cite: 91].
+
+3. Présence potentielle de secrets en dur (Sévérité : ÉLEVÉE)
+   - Description : Le rapport identifie de multiples chaînes encodées en Base64 dans la section Hardcoded Secrets[cite: 109].
+   - Impact : S'il s'agit de clés de chiffrement AES ou de clés d'API, un attaquant peut rétro-ingénierier l'application pour déchiffrer les données locales ou compromettre le backend.
+
+4. Vulnérabilité Janus - Signature v1 (Sévérité MobSF : HIGH)
+   - Description : L'application n'est signée qu'avec le schéma v1[cite: 45, 87].
+   - Impact : Permet à un attaquant d'injecter du code malveillant dans l'APK sans altérer la signature sur les anciennes versions d'Android[cite: 87].
+
+5. Sauvegarde des données autorisée (Sévérité MobSF : WARNING, Réalité : ÉLEVÉE)
+   - Description : L'attribut android:allowBackup=true est présent[cite: 90].
+   - Impact : Un attaquant ayant un accès physique via USB (adb) peut extraire les bases de données et préférences privées de l'application[cite: 90].
+
+---------------------------------------------------------
+Faux positifs potentiels :
+-------------------------
+1. Permissions 'Malware' (INTERNET, ACCESS_NETWORK_STATE, etc.)
+   - Raison du signalement : MobSF signale ces permissions car elles sont souvent utilisées par des malwares[cite: 102, 103].
+   - Justification du faux positif : Pour une application bancaire légitime, l'accès à Internet et à l'état du réseau est absolument essentiel pour communiquer avec le serveur. La présence de ces permissions n'est pas une vulnérabilité en soi.
+
+2. Secrets hardcodés (loginscreen_password / loginscreen_username)
+   - Raison du signalement : Détectés dans la section POSSIBLE SECRETS[cite: 109].
+   - Justification du faux positif : Ce ne sont pas des identifiants valides ou des clés secrètes, mais de simples chaînes de caractères (UI strings) utilisées pour l'affichage de l'interface graphique (ex: 'Password:').
+
+3. Vulnérabilité StrandHogg 2.0 (Signalée 4 fois en HIGH)
+   - Raison du signalement : L'application cible le SDK 22[cite: 29, 90, 91, 92].
+   - Justification du faux positif (relatif) : Bien que le risque de Task Hijacking existe, il s'agit d'une vulnérabilité inhérente aux anciennes versions d'Android (OS-level)[cite: 90]. Le simple fait de recompiler l'application avec un Target SDK récent (29+) corrige ce problème à l'échelle de la plateforme, ce n'est pas une faille logique du code de l'application elle-même[cite: 90].

@@ -1,0 +1,31 @@
+Corrélation MASVS :
+-----------------
+Vulnérabilité : Composants exportés non sécurisés (Bypass d'authentification et Fuite de données)
+Référence MASVS : MSTG-PLATFORM-4
+Description : L'application n'exporte pas de fonctionnalités sensibles via des schémas d'URL personnalisés ou des mécanismes IPC (Intents, Content Providers) sans protection.
+Preuve : Les activités DoTransfer, ViewStatement, ChangePassword et TrackUserContentProvider possèdent l'attribut android:exported="true" dans le fichier AndroidManifest.xml.
+Impact : Contournement de l'authentification (lancement direct de DoTransfer), accès non autorisé, et fuite/altération des données bancaires via le Content Provider.
+
+Vulnérabilité : Secrets codés en dur (Hardcoded Secrets)
+Référence MASVS : MSTG-STORAGE-14
+Description : L'application ne contient pas de données sensibles, telles que des clés d'API, des mots de passe ou des clés cryptographiques, codées en dur dans le code source.
+Preuve : Présence de multiples chaînes Base64 (ex: M/9MnPtaDnNpsJGLBqvtFaALld0qI4JyMOfQfSncPhI=) signalées par MobSF dans la section 'POSSIBLE HARDCODED SECRETS'.
+Impact : Un attaquant ayant accès à l'APK (rétro-ingénierie) peut extraire ces clés pour déchiffrer des données locales ou compromettre la communication avec le backend.
+
+Vulnérabilité : Mode Debug activé et Sauvegarde autorisée
+Référence MASVS : MSTG-CODE-2 / MSTG-STORAGE-8
+Description : (CODE-2) L'application est compilée en mode release (non debuggable). (STORAGE-8) Aucune donnée sensible n'est incluse dans les sauvegardes de l'OS.
+Preuve : Les attributs android:debuggable="true" et android:allowBackup="true" sont présents à la racine de la balise <application>.
+Impact : Permet à un attaquant (ou un malware avec accès physique/USB) d'attacher un débogueur pour modifier l'exécution en temps réel, ou d'extraire les bases de données privées via 'adb backup'.
+
+Tests MASTG complémentaires :
+---------------------------
+Test : Testing for IPC Vulnerabilities
+Référence du test : MASTG-TEST-0022 (Testing Exported Activities) / MASTG-TEST-0027 (Content Providers)
+Description brève : Interagir manuellement avec les composants exportés à l'aide d'outils d'instrumentation ou de lignes de commande.
+Objectif du test : Utiliser 'adb shell am start' pour tenter de lancer la page DoTransfer sans être connecté, ou utiliser 'Drozer' pour requêter TrackUserContentProvider et prouver l'extraction de données.
+
+Test : Testing for Hardcoded Sensitive Data
+Référence du test : MASTG-TEST-0012
+Description brève : Analyser le code source décompilé (via jadx) pour tracer l'utilisation des chaînes de caractères chiffrées/Base64.
+Objectif du test : Confirmer si ces chaînes sont utilisées comme clés AES statiques (souvent utilisées par la classe Crypto de l'application) et vérifier s'il est possible de forger ou déchiffrer les identifiants stockés localement.
